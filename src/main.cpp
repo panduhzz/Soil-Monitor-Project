@@ -14,6 +14,9 @@ TFT_eSPI tft = TFT_eSPI();
 
 DHT dht(DHTPIN, DHTTYPE); // I2C
 
+const int moisturePin = A0;
+float soilMoisture = 0;
+
 unsigned long delayTime;
 
 // Calibration constants:
@@ -53,6 +56,7 @@ void setup(void)
     while (1)
       ;
   }
+  pinMode(moisturePin, INPUT);
   uv.setIntegrationTime(VEML6075::IT_100MS);
   uv.setHighDynamic(VEML6075::DYNAMIC_NORMAL);
   dht.begin();
@@ -113,5 +117,8 @@ void loop()
   Serial.println(F("°F"));
   Serial.println("UV");
   Serial.println(String(uviaCalc) + ", " + String(uvibCalc) + ", " + String(uvi));
-  delay(250);
+
+  soilMoisture = analogRead(moisturePin);
+  Serial.println("Moisture level" + String(soilMoisture));
+  delay(500);
 }
